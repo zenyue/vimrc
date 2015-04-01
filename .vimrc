@@ -50,6 +50,13 @@ set incsearch
 " 搜索时大小写不敏感
 set ignorecase
 
+" 打开文件时尝试指定的编码方式解码
+set fencs=utf-8,gbk,utf-16,big5,gb2312,gb18030
+" 设置终端编码
+set termencoding=utf-8
+" Vim 内部使用的字符编码方式(包括 Vim 的 buffer、菜单文本、消息文本等)
+set encoding=utf-8
+
 " 是否兼容vi，compatible为兼容，nocompatible为不完全兼容 
 " 如果设置为compatible，则tab将不会变成空格 
 set nocompatible
@@ -152,3 +159,4 @@ function MyDiff()
   endif
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
+
