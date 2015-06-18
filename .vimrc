@@ -114,7 +114,7 @@ set listchars=tab:>-,trail:-
 
 " 禁止光标闪烁
 set gcr=a:block-blinkon0
-" 显示光标当前位置
+" 显示光标位置
 set ruler
 " 显示行号
 set number
