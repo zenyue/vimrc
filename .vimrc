@@ -43,6 +43,8 @@ nmap <Leader>WQ :wa<CR>:q<CR>
 nmap <Leader>Q :qa!<CR>
 " 在结对符之间跳转
 nmap <Leader>[ %
+" 利用sudo权限保存只读文件
+nmap <leader>sudo :w !sudo tee %
 " } 快捷键
 
 " 开启实时搜索功能
