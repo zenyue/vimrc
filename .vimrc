@@ -4,11 +4,13 @@ source $VIMRUNTIME/mswin.vim
 behave mswin
 
 " vundle {
-"set rtp+=~/.vim/bundle/vundle/
-"call vundle#rc()
+" 利用git安装vundle
+" git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 " 如果在windows下使用的话，设置为
-set rtp+=$VIM/vimfiles/bundle/vundle/
-call vundle#rc('$VIM/vimfiles/bundle/') 
+"set rtp+=$VIM/vimfiles/bundle/vundle/
+"call vundle#rc('$VIM/vimfiles/bundle/') 
 " }
 " let Vundle manage Vundle
 Bundle 'gmarik/vundle'
