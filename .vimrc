@@ -78,8 +78,7 @@ set helplang=cn
 set nocompatible
 "set compatible
 
-" 设置支持backspace向前删除(indent允许向前删除自动缩进;eol允许向前删除回行
-" ;start允许向前删除字符)
+" 设置支持backspace向前删除(indent允许向前删除自动缩进;eol允许向前删除回行;start允许向前删除字符)
 set backspace=indent,eol,start
 
 " 启用vim自身命令行模式智能补全
