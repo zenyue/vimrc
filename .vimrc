@@ -9,6 +9,8 @@ call vundle#rc()
 " }
 " let Vundle manage Vundle
 Bundle 'gmarik/vundle'
+" 用符号({[  html xml标签 将内容包起来
+Bundle 'tpope/vim-surround'
 
 " 自定义设置 {
 
