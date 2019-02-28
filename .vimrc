@@ -6,11 +6,23 @@ call vundle#rc()
 " 如果在windows下使用的话，设置为
 "set rtp+=$VIM/vimfiles/bundle/vundle/
 "call vundle#rc('$VIM/vimfiles/bundle/') 
-" }
+
 " let Vundle manage Vundle
 Bundle 'gmarik/vundle'
 " 用符号({[  html xml标签 将内容包起来
 Bundle 'tpope/vim-surround'
+" 括号自动补全
+Bundle 'jiangmiao/auto-pairs'
+" 代码自动补全
+"Bundle 'Valloric/YouCompleteMe'
+
+" 状态栏增强
+Bundle 'vim-airline/vim-airline'
+Bundle 'vim-airline/vim-airline-themes'
+let g:airline_theme='solarized' " 设置主题
+let g:airline_solarized_bg='drak' " 设置主题为暗色调
+let g:airline#extensions#tabline#enabled = 1 " 显示窗口tab和buffer
+" }
 
 " 自定义设置 {
 
@@ -65,6 +77,10 @@ set helplang=cn
 " 如果设置为compatible，则tab将不会变成空格 
 set nocompatible
 "set compatible
+
+" 设置支持backspace向前删除(indent允许向前删除自动缩进;eol允许向前删除回行
+" ;start允许向前删除字符)
+set backspace=indent,eol,start
 
 " 启用vim自身命令行模式智能补全
 set wildmenu
@@ -122,6 +138,11 @@ set softtabstop=4
 "显示TAB健 
 set list
 set listchars=tab:>-,trail:-
+" 根据文件类型设置缩进格式
+au FileType html,python,vim,javascript setl shiftwidth=2
+au FileType html,python,vim,javascript setl tabstop=2
+au FileType java,php setl shiftwidth=4
+au FileType java,php setl tabstop=4
 
 " 禁止光标闪烁
 set gcr=a:block-blinkon0
