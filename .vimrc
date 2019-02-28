@@ -1,8 +1,3 @@
-set nocompatible
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-behave mswin
-
 " vundle {
 " 利用git安装vundle
 " git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
@@ -61,9 +56,13 @@ set termencoding=utf-8
 " Vim 内部使用的字符编码方式(包括 Vim 的 buffer、菜单文本、消息文本等)
 set encoding=utf-8
 
+" 设置中文帮助
+set helplang=cn
+
 " 是否兼容vi，compatible为兼容，nocompatible为不完全兼容 
 " 如果设置为compatible，则tab将不会变成空格 
 set nocompatible
+"set compatible
 
 " 启用vim自身命令行模式智能补全
 set wildmenu
@@ -73,6 +72,12 @@ set noimd
 
 " 汉字乱码处理
 let g:airline_powerline_fonts=0
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" Have the mouse enabled all the time:
+"set mouse=a
 
 " 禁止显示滚动条
 set guioptions-=l
@@ -103,9 +108,9 @@ set foldmethod=syntax
 set nofoldenable
 
 " 将制表符扩展为空格
-set expandtab
+"set expandtab
 " 不要将制表符扩展为空格
-"set noexpandtab
+set noexpandtab
 " 设置编辑时制表符占用空格数
 set tabstop=4
 " 设置格式化时制表符占用空格数
@@ -135,7 +140,14 @@ set nowrap
 set formatoptions+=mM
 
 " 缺省不产生备份文件 
-set nobackup 
+set nobackup
+" 不生成undo文件
+set noundofile
+"set undodir=~/.undodir
+"set undofile
+" 不生成临时文件
+set noswapfile
+"set swapfile
 
 " } 自定义设置
 
@@ -163,4 +175,13 @@ function MyDiff()
   endif
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
+
+" 配置文件.vimrc更改后自动重新载入使设置生效
+autocmd! bufwritepost .vimrc source ~/.vimrc  
+
+" 设置重新载入.vimrc快捷键
+map <silent> <leader>ss :source ~/.vimrc<cr> 
+
+" 设置快速编辑.vimrc快捷键
+map <silent> <leader>ee :e ~/.vimrc<cr>
 
