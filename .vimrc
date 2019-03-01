@@ -1,27 +1,40 @@
-" vundle {
-" 利用git安装vundle
-" git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-" 如果在windows下使用的话，设置为
-"set rtp+=$VIM/vimfiles/bundle/vundle/
-"call vundle#rc('$VIM/vimfiles/bundle/') 
+function GetOS()
+  if (has('win32') || has('win95') || has('win64') || has('win16'))
+    return 'windows'
+  elseif has('unix')
+    return 'linux'
+  elseif has('mac')
+    return 'mac'
+  endif
+endfunction
 
-" let Vundle manage Vundle
-Bundle 'gmarik/vundle'
+" Vim-plug {
+
+if GetOS() == 'windows'
+" 如果未安装 vim-plug 需要先下载
+" curl -fLo %USERPROFILE%/vimfiles/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  call plug#begin('$HOME/.vim/plugged')
+else
+" 如果未安装 vim-plug 需要先下载
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  call plug#begin('~/.vim/plugged')
+endif
+
 " 用符号({[  html xml标签 将内容包起来
-Bundle 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 " 括号自动补全
-Bundle 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 " 代码自动补全
-"Bundle 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 
 " 状态栏增强
-Bundle 'vim-airline/vim-airline'
-Bundle 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 let g:airline_theme='solarized' " 设置主题
 let g:airline_solarized_bg='drak' " 设置主题为暗色调
 let g:airline#extensions#tabline#enabled = 1 " 显示窗口tab和buffer
+
+call plug#end()
 " }
 
 " 自定义设置 {
@@ -206,4 +219,3 @@ map <silent> <leader>ss :source ~/.vimrc<cr>
 
 " 设置快速编辑.vimrc快捷键
 map <silent> <leader>ee :e ~/.vimrc<cr>
-
