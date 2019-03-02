@@ -11,11 +11,11 @@ endfunction
 let $CUR_OS = GetOS()
 
 if $CUR_OS == 'windows'
-	let $VIMRC = '$HOME/_vimrc'
-	let $PLUGED = '$HOME/.vim/plugged'
+  let $VIMRC = '$HOME/_vimrc'
+  let $PLUGED = '$HOME/.vim/plugged'
 else
-	let $VIMRC = '~/.vimrc'
-	let $PLUGED = '~/.vim/plugged'
+  let $VIMRC = '~/.vimrc'
+  let $PLUGED = '~/.vim/plugged'
 endif
 
 " Vim-plug {
