@@ -8,31 +8,202 @@ function GetOS()
   endif
 endfunction
 
+let $CUR_OS = GetOS()
+
+if $CUR_OS == 'windows'
+	let $VIMRC = '$HOME/_vimrc'
+	let $PLUGED = '$HOME/.vim/plugged'
+else
+	let $VIMRC = '~/.vimrc'
+	let $PLUGED = '~/.vim/plugged'
+endif
+
 " Vim-plug {
 
-if GetOS() == 'windows'
 " 如果未安装 vim-plug 需要先下载
-" curl -fLo %USERPROFILE%/vimfiles/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  call plug#begin('$HOME/.vim/plugged')
-else
-" 如果未安装 vim-plug 需要先下载
-" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  call plug#begin('~/.vim/plugged')
-endif
+" linux下 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" windows下 curl -fLo %USERPROFILE%/vimfiles/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+call plug#begin($PLUGED)
+
+" 平滑滚动
+Plug 'terryma/vim-smooth-scroll'
+let $PUG_vim_smooth_scroll = 1
+
+" 光标快速移动工具
+Plug 'easymotion/vim-easymotion'
+
+" 颜色主题
+Plug 'flazz/vim-colorschemes'
+let $PUG_vim_colorschemes = 1
+
+"快速切换主题
+Plug 'chxuan/change-colorscheme'
+let $PUG_change_colorscheme = 1
 
 " 用符号({[  html xml标签 将内容包起来
 Plug 'tpope/vim-surround'
+
 " 括号自动补全
 Plug 'jiangmiao/auto-pairs'
+
 " 代码自动补全
 "Plug 'Valloric/YouCompleteMe'
 
 " 状态栏增强
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme='solarized' " 设置主题
-let g:airline_solarized_bg='drak' " 设置主题为暗色调
+let g:airline_theme='bubblegum' " 设置主题
+"let g:airline_solarized_bg='drak' " 设置主题为暗色调
 let g:airline#extensions#tabline#enabled = 1 " 显示窗口tab和buffer
+" 汉字乱码处理
+let g:airline_powerline_fonts=0
+
+" 编辑增强
+"Plug 'chxuan/vim-edit'
+"let $PUG_vim_edit = 1
+
+" 缓存操作
+Plug 'chxuan/vim-buffer'
+let $PUG_vim_buffer = 1
+
+" 目录树
+Plug 'scrooloose/nerdtree'
+let $PUG_nerdtree = 1
+" NERDTree随vim启动
+"autocmd vimenter * NERDTree
+"打开文件或目录时，打开NERDTree
+"autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+" close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"let g:NERDTreeDirArrowExpandable = '▸'
+"let g:NERDTreeDirArrowCollapsible = '▾'
+" NerdTree文件类型高亮
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Disable Highlighting
+"let g:NERDTreeDisableFileExtensionHighlight = 1
+"let g:NERDTreeDisableExactMatchHighlight = 1
+"let g:NERDTreeDisablePatternMatchHighlight = 1
+" Highlight full name
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+" Highlight folders using exact match
+"let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+"let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
+" NerdTree显示git状态
+Plug 'Xuyuanp/nerdtree-git-plugin'
+"let g:NERDTreeIndicatorMapCustom = {
+"    \ "Modified"  : "✹",
+"    \ "Staged"    : "✚",
+"    \ "Untracked" : "✭",
+"    \ "Renamed"   : "➜",
+"    \ "Unmerged"  : "═",
+"    \ "Deleted"   : "✖",
+"    \ "Dirty"     : "✗",
+"    \ "Clean"     : "✔︎",
+"    \ 'Ignored'   : '☒',
+"    \ "Unknown"   : "?"
+"    \ }
+
+" 显示文件类型图标
+Plug 'ryanoasis/vim-devicons'
+
+" Markdown 支持
+" if you don't have nodejs and yarn
+" use pre build
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+" have nodejs and yarn
+"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+" set to 1, the nvim will open the preview window once enter the markdown buffer
+" default: 0
+let g:mkdp_auto_start = 0
+" set to 1, the nvim will auto close current preview window when change
+" from markdown buffer to another buffer
+" default: 1
+let g:mkdp_auto_close = 1
+" set to 1, the vim will just refresh markdown when save the buffer or
+" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" move the cursor
+" default: 0
+let g:mkdp_refresh_slow = 0
+" set to 1, the MarkdownPreview command can be use for all files,
+" by default it just can be use in markdown file
+" default: 0
+let g:mkdp_command_for_global = 0
+" set to 1, preview server available to others in your network
+" by default, the server only listens on localhost (127.0.0.1)
+" default: 0
+let g:mkdp_open_to_the_world = 0
+" use custom IP to open preview page
+" useful when you work in remote vim and preview on local browser
+" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
+" default empty
+let g:mkdp_open_ip = ''
+" specify browser to open preview page
+" default: ''
+let g:mkdp_browser = ''
+" set to 1, echo preview page url in command line when open preview page
+" default is 0
+let g:mkdp_echo_preview_url = 0
+" a custom vim function name to open preview page
+" this function will receive url as param
+" default is empty
+let g:mkdp_browserfunc = ''
+" options for markdown render
+" mkit: markdown-it options for render
+" katex: katex options for math
+" uml: markdown-it-plantuml options
+" maid: mermaid options
+" disable_sync_scroll: if disable sync scroll, default 0
+" sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
+"   middle: mean the cursor position alway show at the middle of the preview page
+"   top: mean the vim top viewport alway show at the top of the preview page
+"   relative: mean the cursor position alway show at the relative positon of the preview page
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle'
+    \ }
+
+" use a custom markdown style must be absolute path
+let g:mkdp_markdown_css = ''
+
+" use a custom highlight style must absolute path
+let g:mkdp_highlight_css = ''
+
+" use a custom port to start server or random for empty
+let g:mkdp_port = ''
+
+" preview page title
+" ${name} will be replace with the file name
+"let g:mkdp_page_title = '「${name}」'
+
+" 提供生成函数实现、函数声明/实现跳转、.h .cpp切换等功能
+Plug 'chxuan/cpp-mode'
+let $PUG_cpp_mode = 1
+
+" if/end/endif/endfunction补全
+Plug 'tpope/vim-endwise'
+
+" 快速注释代码
+Plug 'tpope/vim-commentary'
+
+" 使用majutsushi/tagbar的v2.3版本，taglist的替代品，显示类/方法/变量
+Plug 'godlygeek/tabular'
+
+" 在命令区显示当前调用函数的声明
+Plug 'Shougo/echodoc.vim'
+set cmdheight=2
+
+" git 集成
+Plug 'tpope/vim-fugitive'
+autocmd QuickFixCmdPost *grep* cwindow
+Plug 'junegunn/gv.vim'
 
 call plug#end()
 " }
@@ -49,28 +220,6 @@ filetype plugin on
 " 自适应不同语言的智能缩进
 filetype indent on
 
-" 快捷键 {
-" 行首和行尾
-nmap lb 0
-nmap le $
-" 复制选中文本到系统剪贴板
-vnoremap <Leader>y "+y
-" 粘贴系统剪贴板内容
-nmap <Leader>p "+p
-" 关闭当前分割窗口
-nmap <Leader>q :q<CR>
-" 保存当前窗口内容
-nmap <Leader>w :w<CR>
-" 保存所有窗口内容并退出
-nmap <Leader>WQ :wa<CR>:q<CR>
-" 不保存关闭所有窗口
-nmap <Leader>Q :qa!<CR>
-" 在结对符之间跳转
-nmap <Leader>[ %
-" 利用sudo权限保存只读文件
-nmap <leader>sudo :w !sudo tee %
-" } 快捷键
-
 " 开启实时搜索功能
 set incsearch
 " 搜索时大小写不敏感
@@ -82,6 +231,13 @@ set fencs=utf-8,gbk,utf-16,big5,gb2312,gb18030
 set termencoding=utf-8
 " Vim 内部使用的字符编码方式(包括 Vim 的 buffer、菜单文本、消息文本等)
 set encoding=utf-8
+
+" 宽字符显示为双倍宽度
+if has("multi_byte")
+  if v:lang =~? '^\|\|'
+    set ambiwidth=double
+  endif
+endif
 
 " 设置中文帮助
 set helplang=cn
@@ -100,14 +256,22 @@ set wildmenu
 " 切换到普通模式后关闭输入法
 set noimd
 
-" 汉字乱码处理
-let g:airline_powerline_fonts=0
-
 " Set to auto read when a file is changed from the outside
 set autoread
 
 " Have the mouse enabled all the time:
 "set mouse=a
+
+" 颜色主题
+if $PUG_vim_colorschemes == 1
+  colorscheme Monokai
+  "colorscheme OceanicNext
+  "colorscheme molokai
+  "colorscheme ChocolatePapaya
+  "colorscheme ChocolateLiquor
+else
+  colorscheme desert
+endif
 
 " 禁止显示滚动条
 set guioptions-=l
@@ -186,6 +350,77 @@ set noswapfile
 
 " } 自定义设置
 
+" 快捷键 {
+" 行首和行尾
+nmap lb 0
+nmap le $
+" 复制选中文本到系统剪贴板
+vnoremap <Leader>y "+y
+" 支持 Ctrl + c 复制
+vnoremap <silent> <c-c> "+y
+" 粘贴系统剪贴板内容
+nmap <Leader>p "+p
+" 支持 Ctrl + v 粘贴
+nmap <silent> <c-v> "+p
+" 保存当前窗口内容
+nmap <Leader>w :w<CR>
+" 支持 Ctrl + s 保存
+nmap <silent> <c-s> :w<CR>
+" 关闭当前分割窗口
+nmap <Leader>q :q<CR>
+" 保存所有窗口内容并退出
+nmap <Leader>WQ :wa<CR>:q<CR>
+" 不保存关闭所有窗口
+nmap <Leader>Q :qa!<CR>
+" 在结对符之间跳转
+nmap <Leader>[ %
+" 利用sudo权限保存只读文件
+nmap <leader>sudo :w !sudo tee %
+
+if $PUG_vim_edit == 1
+  nnoremap Y :CopyText<cr>
+  nnoremap D :DeleteText<cr>
+  nnoremap C :ChangeText<cr>
+  nnoremap <leader>r :ReplaceTo<space>
+endif
+
+if $PUG_vim_buffer == 1
+  nnoremap <c-p> :PreviousBuffer<cr>
+  nnoremap <c-n> :NextBuffer<cr>
+  nnoremap <leader>d :CloseCurrentBuffer<cr>
+  nnoremap <leader>D :BufOnly<cr>
+endif
+
+if $PUG_nerdtree == 1
+  nnoremap <leader>n :NERDTreeToggle<cr>
+endif
+
+if $PUG_vim_smooth_scroll == 1
+  noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+  noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+  noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
+  noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
+endif
+
+if $PUG_change_colorscheme == 1
+  nnoremap <silent> <F9> :PreviousColorScheme<cr>
+  inoremap <silent> <F9> <esc> :PreviousColorScheme<cr>
+  nnoremap <silent> <F10> :NextColorScheme<cr>
+  inoremap <silent> <F10> <esc> :NextColorScheme<cr>
+  "nnoremap <silent> <F12> :ShowColorScheme<cr>
+  "inoremap <silent> <F12> <esc> :ShowColorScheme<cr>
+endif
+
+if $PUG_cpp_mode == 1
+  nnoremap <silent> <F12> :GoToFunImpl<cr>
+  nnoremap <leader>U :GoToFunImpl<cr>
+  nnoremap <silent> <leader>a :Switch<cr>
+  nnoremap <leader><leader>fp :FormatFunParam<cr>
+  nnoremap <leader><leader>if :FormatIf<cr>
+endif
+
+" } 快捷键
+
 set diffexpr=MyDiff()
 function MyDiff()
   let opt = '-a --binary '
@@ -212,10 +447,11 @@ function MyDiff()
 endfunction
 
 " 配置文件.vimrc更改后自动重新载入使设置生效
-autocmd! bufwritepost .vimrc source ~/.vimrc  
+autocmd! bufwritepost .vimrc source $VIMRC  
 
 " 设置重新载入.vimrc快捷键
-map <silent> <leader>ss :source ~/.vimrc<cr> 
+  map <silent> <leader>ss :source $VIMRC<cr> 
 
 " 设置快速编辑.vimrc快捷键
-map <silent> <leader>ee :e ~/.vimrc<cr>
+  map <silent> <leader>ee :e $VIMRC<cr>
+
