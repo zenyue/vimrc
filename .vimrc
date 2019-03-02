@@ -8,6 +8,13 @@ function GetOS()
   endif
 endfunction
 
+function HasPlug(pugname)
+  if match(&runtimepath, pugname) != -1
+    return 1
+  endif
+  return 0
+endfunction
+
 let $CUR_OS = GetOS()
 
 if $CUR_OS == 'windows'
@@ -39,6 +46,10 @@ let $PUG_vim_colorschemes = 1
 "快速切换主题
 Plug 'chxuan/change-colorscheme'
 let $PUG_change_colorscheme = 1
+
+" 搜索增强 正则搜索
+Plug 'haya14busa/incsearch.vim'
+let $PUG_incsearch = 1
 
 " 用符号({[  html xml标签 将内容包起来
 Plug 'tpope/vim-surround'
@@ -76,7 +87,20 @@ let $PUG_nerdtree = 1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 "autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 " close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" 显示行号
+let NERDTreeShowLineNumbers=1
+let NERDTreeAutoCenter=1
+" 是否显示隐藏文件
+let NERDTreeShowHidden=1
+" 设置宽度
+let NERDTreeWinSize=31
+" 在终端启动vim时，共享NERDTree
+let g:nerdtree_tabs_open_on_console_startup=1
+" 忽略以下文件的显示
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+" 显示书签列表
+let NERDTreeShowBookmarks=1
 "let g:NERDTreeDirArrowExpandable = '▸'
 "let g:NERDTreeDirArrowCollapsible = '▾'
 " NerdTree文件类型高亮
@@ -213,6 +237,15 @@ call plug#end()
 " 定义快捷键的前缀，即<Leader>
 let mapleader=";"
 
+" 历史记录数
+set history=200
+
+"共享剪贴板  
+set clipboard+=unnamed
+
+"自动保存
+"set autowrite
+
 " 开启文件类型侦测
 filetype on
 " 根据不同文件类型加载对应的插件
@@ -249,6 +282,8 @@ set nocompatible
 
 " 设置支持backspace向前删除(indent允许向前删除自动缩进;eol允许向前删除回行;start允许向前删除字符)
 set backspace=indent,eol,start
+" 允许backspace和光标键跨越行边界
+set whichwrap+=<,>,h,l
 
 " 启用vim自身命令行模式智能补全
 set wildmenu
@@ -256,13 +291,29 @@ set wildmenu
 " 切换到普通模式后关闭输入法
 set noimd
 
+" 在分割窗口间的空白处增上\，便于阅读
+"set fillchars=vert:\ ,stl:\ ,stlnc:\
+
 " Set to auto read when a file is changed from the outside
 set autoread
 
 " Have the mouse enabled all the time:
 "set mouse=a
 
+" do not redraw while running macros
+"set lazyredraw
+
+" 匹配括号高亮的时间（单位是十分之一秒）
+set matchtime=5
+
+" 光标移动到buffer的顶部和底部时保持3行距离
+set scrolloff=3
+
+" don't insert any extra pixel lines betweens rows
+set linespace=0
+
 " 颜色主题
+set background=dark
 if $PUG_vim_colorschemes == 1
   colorscheme Monokai
   "colorscheme OceanicNext
@@ -273,6 +324,15 @@ else
   colorscheme desert
 endif
 
+" 打开状态栏标尺
+"set ruler
+" 设置魔术
+"set magic
+" 去掉输入错误的提示声音
+set noeb
+"set noerrorbells
+" 在处理未保存或只读文件的时候，弹出确认
+set confirm
 " 禁止显示滚动条
 set guioptions-=l
 set guioptions-=L
@@ -287,6 +347,14 @@ set laststatus=2
 set shortmess=atI
 " 命令行的高度，默认为1
 set cmdheight=2
+" 在命令区提示修改了什么内容
+set report=0
+" show the command being typed
+"set showcmd
+" show matching brackets
+"set showmatch
+" Keep 5 lines at the size
+"set sidescrolloff=10
 
 " 开启语法高亮功能
 syntax enable
@@ -362,12 +430,35 @@ vnoremap <silent> <c-c> "+y
 nmap <Leader>p "+p
 " 支持 Ctrl + v 粘贴
 nmap <silent> <c-v> "+p
+" 打开新Tab页
+nmap <silent> <c-n> :tabe<CR>
+" 切换Tab页 [默认Normal状态下 gt gT 也可向前/后切换Tab]
+nmap <silent> <c-tab> :tabp<CR>
+nmap <silent> <M-`> :tabp<CR>
+imap <silent> <c-tab> <esc> :tabp<CR>
+imap <silent> <M-`> <esc> :tabp<CR>
+" 使用alt+数字键快速切换到指定tab页
+:nn <M-1> 1gt
+:nn <M-2> 2gt
+:nn <M-3> 3gt
+:nn <M-4> 4gt
+:nn <M-5> 5gt
+:nn <M-6> 6gt
+:nn <M-7> 7gt
+:nn <M-8> 8gt
+:nn <M-9> 9gt
+:nn <M-0> :tablast<CR>
+
 " 保存当前窗口内容
 nmap <Leader>w :w<CR>
-" 支持 Ctrl + s 保存
-nmap <silent> <c-s> :w<CR>
+" windows下支持 Ctrl + s 保存[linux下ctrl+s会锁住终端]
+if $CUR_OS == 'windows'
+  nmap <silent> <c-s> :w<CR>
+endif
 " 关闭当前分割窗口
 nmap <Leader>q :q<CR>
+" 不保存关闭当前分割窗口
+nmap <Leader>q1 :q!<CR>
 " 保存所有窗口内容并退出
 nmap <Leader>WQ :wa<CR>:q<CR>
 " 不保存关闭所有窗口
@@ -386,13 +477,13 @@ endif
 
 if $PUG_vim_buffer == 1
   nnoremap <c-p> :PreviousBuffer<cr>
-  nnoremap <c-n> :NextBuffer<cr>
+  "nnoremap <c-n> :NextBuffer<cr>
   nnoremap <leader>d :CloseCurrentBuffer<cr>
   nnoremap <leader>D :BufOnly<cr>
 endif
 
 if $PUG_nerdtree == 1
-  nnoremap <leader>n :NERDTreeToggle<cr>
+  nnoremap <leader>t :NERDTreeToggle<cr>
 endif
 
 if $PUG_vim_smooth_scroll == 1
