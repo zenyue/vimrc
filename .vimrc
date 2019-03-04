@@ -1,4 +1,4 @@
-function GetOS()
+function! GetOS()
   if (has('win32') || has('win95') || has('win64') || has('win16'))
     return 'windows'
   elseif has('unix')
@@ -8,7 +8,7 @@ function GetOS()
   endif
 endfunction
 
-function HasPlug(pugname)
+function! HasPlug(pugname)
   if match(&runtimepath, pugname) != -1
     return 1
   endif
@@ -512,8 +512,7 @@ endif
 
 " } 快捷键
 
-set diffexpr=MyDiff()
-function MyDiff()
+function! MyDiff()
   let opt = '-a --binary '
   if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
   if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
@@ -536,6 +535,8 @@ function MyDiff()
   endif
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
+
+set diffexpr=MyDiff()
 
 " 配置文件.vimrc更改后自动重新载入使设置生效
 autocmd! bufwritepost .vimrc source $VIMRC  
