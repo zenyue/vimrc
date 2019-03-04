@@ -1,6 +1,5 @@
 # vimrc
 ## 安装vim-plug
-安装 vim-plug 需要先安装git
 linux下
 ```
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -10,6 +9,8 @@ windows下
 ```
 curl -fLo %USERPROFILE%/vimfiles/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
+
+注：安装 vim-plug 需要先安装git
 
 ## 下载vimrc
 ```
